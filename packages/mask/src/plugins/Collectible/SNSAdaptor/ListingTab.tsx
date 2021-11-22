@@ -50,12 +50,12 @@ export function ListingTab() {
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && orders.value.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && orders.value?.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
         }
-    }, [provider, orders.value])
+    }, [provider, orders])
 
     const dataSource = useMemo(() => {
         if (!orders.value || !orders.value?.length) return []
@@ -66,10 +66,10 @@ export function ListingTab() {
             else if (current.isGreaterThan(next)) return 1
             return 0
         })
-    }, [orders.value])
+    }, [orders, asset.value])
 
-    if (orders.loading) return <LoadingTable />
-    if (!orders.value || orders.error || !dataSource.length)
+    if (asset.loading) return <LoadingTable />
+    if (!asset.value || asset.error || !dataSource.length)
         return (
             <>
                 <Table size="small" stickyHeader>
@@ -82,7 +82,7 @@ export function ListingTab() {
                                         marginTop: 1,
                                     }}
                                     variant="text"
-                                    onClick={() => orders.retry()}>
+                                    onClick={() => asset.retry()}>
                                     {t('plugin_collectible_retry')}
                                 </Button>
                             </TableCell>

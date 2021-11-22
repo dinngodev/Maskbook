@@ -20,7 +20,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import { unionBy } from 'lodash-es'
+import { unionBy } from 'lodash-unified'
 import { useNFTs } from '../../EVM/hooks/useNFTs'
 
 const useStyles = makeStyles()((theme) => ({

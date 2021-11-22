@@ -55,15 +55,15 @@ export function OfferTab() {
         } else {
             return false
         }
-    }, [provider, offers.value])
+    }, [provider, offers])
 
     const dataSource = useMemo(() => {
-        if (!offers.value || !offers.value?.length) return []
+        if (!offers.value?.length) return []
         return offers.value
-    }, [offers.value])
+    }, [offers])
 
-    if (offers.loading) return <LoadingTable />
-    if (!offers.value || offers.error || !dataSource.length)
+    if (asset.loading) return <LoadingTable />
+    if (!offers.value?.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -75,7 +75,7 @@ export function OfferTab() {
                                     marginTop: 1,
                                 }}
                                 variant="text"
-                                onClick={() => offers.retry()}>
+                                onClick={() => asset.retry()}>
                                 {t('plugin_collectible_retry')}
                             </Button>
                         </TableCell>

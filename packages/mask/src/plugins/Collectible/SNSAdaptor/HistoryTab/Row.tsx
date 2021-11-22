@@ -9,8 +9,8 @@ import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '..
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
-import type { NFTHistory } from '../../../EVM/types'
 import { getOrderUnitPrice } from '../../../EVM/utils'
+import type { NFTHistory } from '../../../EVM/types/NFT'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { currySameAddress, isSameAddress, useAccount, useChainId, useTokenConstants } from '@masknet/web3-shared-evm'
-import { PluginEVMRPC } from '../messages'
+import { EVM_RPC } from '../messages'
 
 export function useAsset(address: string, token_id: string) {
     const account = useAccount()
@@ -8,12 +8,8 @@ export function useAsset(address: string, token_id: string) {
     const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
-        console.log('----')
-        console.log(address)
-        console.log(token_id)
-        const asset = await PluginEVMRPC.getAsset(address, token_id, chainId)
-        console.log('-------------')
-        console.log(asset)
+        const asset = await EVM_RPC.getAsset(address, token_id, chainId)
+
         return {
             ...asset,
             is_order_weth: isSameAddress(asset?.desktopOrder?.payment_token ?? '', WNATIVE_ADDRESS) ?? false,

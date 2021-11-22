@@ -6,10 +6,10 @@ import {
     FungibleTokenDetailed,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { compact, first } from 'lodash-es'
+import { compact, first } from 'lodash-unified'
 
 import urlcat from 'urlcat'
-import { AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
+import { AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types/NFT'
 
 const RaribleMainnetURL = 'https://api-mainnet.rarible.com/marketplace/api/v4/'
 const RaribleChainURL = 'https://ethereum-api.rarible.org/'

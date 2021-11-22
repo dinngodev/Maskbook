@@ -7,7 +7,7 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { head, uniqBy } from 'lodash-es'
+import { head, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { AssetCollection, AssetOrder, NFTAsset, NFTHistory } from '../types/NFT'
 import { getOrderUnitPrice, getOrderUSDPrice, toDate, toTokenDetailed } from '../utils'

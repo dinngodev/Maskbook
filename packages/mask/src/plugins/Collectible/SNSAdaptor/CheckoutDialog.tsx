@@ -94,7 +94,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
             }
             throw error
         }
-    }, [asset?.value, account, showSnackbar])
+    }, [asset?.value, account, showSnackbar, order?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -115,7 +115,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>
-                            <CheckoutOrder asset={asset} />
+                            <CheckoutOrder asset={asset} assetOrder={order} />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel
