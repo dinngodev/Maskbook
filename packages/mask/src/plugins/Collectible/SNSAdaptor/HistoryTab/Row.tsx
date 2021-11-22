@@ -4,13 +4,13 @@ import LinkIcon from '@mui/icons-material/Link'
 import { FormattedBalance } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-evm'
 import { formatElapsed } from '../../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../../types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
 import type { NFTHistory } from '../../../EVM/types'
+import { getOrderUnitPrice } from '../../../EVM/utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -52,10 +52,7 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
-        const price = formatBalance(event.price.quantity, event.price.asset?.decimals ?? 0)
-        const quantity = formatBalance(event.price?.quantity ?? 0, event.price?.asset?.decimals ?? 0)
-
-        return new BigNumber(price).dividedBy(quantity).toFixed(3, 1).toString()
+        return getOrderUnitPrice(event.price.price ?? 0, event.price.paymentToken?.decimals, event.price.quantity)
     }, [event, isDifferenceToken, provider])
 
     return (
@@ -84,7 +81,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                                 </Link>
                             )}
                             {unitPrice}
-                            {event.price?.asset?.asset_contract.symbol}
+                            {event.price?.paymentToken?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>

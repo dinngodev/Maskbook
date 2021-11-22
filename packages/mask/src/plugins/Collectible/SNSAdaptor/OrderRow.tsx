@@ -9,6 +9,7 @@ import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import { useMemo } from 'react'
 import type { AssetOrder } from '../../EVM/types'
+import { getOrderUnitPrice } from '../../EVM/utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -128,7 +129,11 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${order.current_price} ${
+                            {`${getOrderUnitPrice(
+                                order.current_price,
+                                order.payment_token_contract?.decimals,
+                                order.quantity,
+                            )} ${
                                 provider === CollectibleProvider.OPENSEA
                                     ? order.payment_token_contract?.symbol ?? ''
                                     : 'ETH'

@@ -302,9 +302,6 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId) {
 
     return {
         is_verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
-        //      is_order_weth: isSameAddress(desktopOrder.payment_token ?? '', WNATIVE_ADDRESS),
-        //      is_collection_weth: openSeaResponse.collection.payment_tokens.some(currySameAddress(WNATIVE_ADDRESS)),
-        //  is_owner: asset.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
         // it's an IOS string as my inspection
         is_auction: Date.parse(`${asset.endTime ?? ''}Z`) > Date.now(),
         image_url: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
@@ -455,7 +452,7 @@ async function fetchOrder(
     params.append('token_id', tokenId)
     params.append('side', side.toString())
     params.append('offset', page.toString())
-    params.append('size', size.toString())
+    params.append('limit', size.toString())
     const response = await (
         await fetch(`https://api.opensea.io/wyvern/v1/orders?${params.toString()}`, {
             method: 'GET',
@@ -478,7 +475,7 @@ export async function getOrder(address: string, tokenId: string, side: number, c
     const size = 50
     let order
     do {
-        order = await fetchOrder(address, tokenId, side, size, page, chainId)
+        order = await fetchOrder(address, tokenId, side, page, size, chainId)
         orders = orders.concat(order ?? [])
         page = page + 1
     } while (order.length === size)

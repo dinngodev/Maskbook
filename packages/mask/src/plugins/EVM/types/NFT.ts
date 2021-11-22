@@ -1,4 +1,4 @@
-import { ERC20TokenDetailed, NativeTokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '@masknet/web3-shared-evm'
 
 export enum OrderSide {
     Buy = 0,
