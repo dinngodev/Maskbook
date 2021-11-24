@@ -5,14 +5,21 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
-import { ChainId, formatBalance, useAccount, useWeb3State } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { useWeb3State as useWeb3PluginState, Web3Plugin } from '@masknet/plugin-infra'
+import {
+    useNetworkDescriptor,
+    useWeb3State as useWeb3PluginState,
+    Web3Plugin,
+    useAccount,
+    NetworkPluginID,
+} from '@masknet/plugin-infra'
+import { usePluginID } from '../../../Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -65,6 +72,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const { Asset } = useWeb3PluginState()
 
     const { networkType, portfolioProvider } = useWeb3State()
+    const network = useNetworkDescriptor()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
     const {
@@ -72,7 +80,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         loading: detailedTokensLoading,
         value: detailedTokens,
     } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, networkType),
+        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
         [account, Asset, portfolioProvider, networkType],
     )
 
@@ -120,6 +128,8 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const currentPluginId = usePluginID()
+
     return (
         <TableContainer className={classes.container}>
             {isLoading || isEmpty ? (
@@ -143,9 +153,11 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             <TableCell key="Value" align="center" variant="head" className={classes.header}>
                                 {t.wallets_assets_value()}
                             </TableCell>
-                            <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_operation()}
-                            </TableCell>
+                            {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                                <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_operation()}
+                                </TableCell>
+                            )}
                         </TableRow>
                     </TableHead>
 
